@@ -1,0 +1,733 @@
+/* ==========================================================================
+   ForestWatch VR - Specialized Components & Module Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 3D Forest Explorer & Simulator Viewport
+   -------------------------------------------------------------------------- */
+.forest-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 640px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  background: #020906;
+  box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 768px) {
+  .forest-canvas-container {
+    height: 480px;
+  }
+}
+
+#forest-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+  cursor: grab;
+}
+
+#forest-canvas:active {
+  cursor: grabbing;
+}
+
+/* 3D Canvas Top & Bottom HUD Overlays */
+.canvas-hud-top {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.canvas-hud-bottom {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.hud-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  pointer-events: auto;
+  box-shadow: var(--shadow-md);
+}
+
+.hud-tool-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
+.hud-tool-btn:hover, .hud-tool-btn.active {
+  background: var(--emerald-500);
+  border-color: var(--emerald-400);
+  color: #ffffff;
+  box-shadow: 0 0 12px var(--emerald-glow);
+}
+
+.hud-tool-btn.danger-active.active {
+  background: var(--accent-danger);
+  border-color: #f87171;
+  color: #ffffff;
+  box-shadow: 0 0 12px var(--accent-danger-glow);
+}
+
+.canvas-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(6, 20, 15, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  z-index: 50;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.canvas-loading-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(52, 211, 153, 0.2);
+  border-top-color: var(--emerald-400);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 3D Scene Controls Grid */
+.simulator-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.8rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 1080px) {
+  .simulator-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.simulator-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Metrics Cards & Counters */
+.metric-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.metric-pill {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.metric-pill-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.metric-pill-val.good { color: var(--emerald-400); }
+.metric-pill-val.warn { color: var(--accent-amber); }
+.metric-pill-val.bad  { color: var(--accent-danger); }
+
+.metric-pill-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Interactive Sliders & Progress */
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.slider-custom {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  outline: none;
+  transition: background var(--transition-fast);
+}
+
+.slider-custom::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--emerald-400);
+  box-shadow: 0 0 10px var(--emerald-glow);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.slider-custom::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--emerald-500), var(--emerald-400));
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+.progress-bar-fill.danger {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+/* --------------------------------------------------------------------------
+   2. Interactive Leaflet Map Section
+   -------------------------------------------------------------------------- */
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 580px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-lg);
+}
+
+#leaflet-map {
+  width: 100%;
+  height: 100%;
+  background: #091a13;
+  z-index: 1;
+}
+
+.map-control-floating {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.map-search-bar {
+  position: absolute;
+  top: 1rem;
+  left: 3.5rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 0.35rem 0.9rem;
+  box-shadow: var(--shadow-md);
+  max-width: 320px;
+  width: 100%;
+}
+
+.map-search-input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  outline: none;
+  width: 100%;
+  padding-left: 0.4rem;
+}
+
+.map-search-input::placeholder {
+  color: var(--text-dim);
+}
+
+/* Custom Leaflet Dark Theme Overrides */
+.leaflet-container {
+  font-family: var(--font-main) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(14px) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-active) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 0.2rem !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-card) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0.8rem 1rem !important;
+  line-height: 1.5 !important;
+}
+
+.map-popup-header {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--emerald-400);
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.map-popup-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  margin: 0.6rem 0;
+  padding: 0.4rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. Historical Comparison Split Slider
+   -------------------------------------------------------------------------- */
+.compare-container {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  height: 520px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  user-select: none;
+  box-shadow: var(--shadow-lg);
+}
+
+.compare-image-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.compare-overlay-before {
+  z-index: 2;
+  width: 50%;
+  border-right: 2px solid #ffffff;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.7);
+}
+
+.compare-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--emerald-500);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  cursor: ew-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--emerald-700);
+  font-size: 1.1rem;
+}
+
+.compare-tag {
+  position: absolute;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+  z-index: 5;
+}
+
+.compare-tag.tag-before {
+  top: 1rem;
+  left: 1rem;
+  background: rgba(6, 78, 59, 0.85);
+  color: #a7f3d0;
+  border: 1px solid var(--emerald-400);
+}
+
+.compare-tag.tag-after {
+  top: 1rem;
+  right: 1rem;
+  background: rgba(185, 28, 28, 0.85);
+  color: #fecaca;
+  border: 1px solid #f87171;
+}
+
+/* Timeline Scrubber */
+.timeline-scrubber {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 720px;
+  margin: 1.8rem auto 0 auto;
+  position: relative;
+  padding: 0 1rem;
+}
+
+.timeline-step-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.timeline-step-btn:hover, .timeline-step-btn.active {
+  background: var(--emerald-500);
+  border-color: var(--emerald-400);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--emerald-glow);
+}
+
+/* --------------------------------------------------------------------------
+   4. Restoration Lab Components
+   -------------------------------------------------------------------------- */
+.species-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+
+.species-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.species-card:hover, .species-card.selected {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: var(--emerald-400);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--emerald-glow);
+}
+
+.species-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.species-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.species-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   5. Impact Analytics Charts Grid
+   -------------------------------------------------------------------------- */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.8rem;
+}
+
+@media (max-width: 900px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.chart-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chart-container-box {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+/* --------------------------------------------------------------------------
+   6. WebXR / VR Experience Modal & Indicators
+   -------------------------------------------------------------------------- */
+.vr-hardware-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.15));
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .vr-hardware-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-normal);
+  padding: 1rem;
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-window {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-lg);
+  max-width: 580px;
+  width: 100%;
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.95);
+  transition: transform var(--transition-normal);
+}
+
+.modal-backdrop.open .modal-window {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+  transition: color var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   7. Academic Profile Card & References (FA-2)
+   -------------------------------------------------------------------------- */
+.student-profile-badge {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 78, 59, 0.2));
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+  margin-bottom: 2.5rem;
+}
+
+.student-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--emerald-500), #064e3b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 0 16px var(--emerald-glow);
+}
+
+.student-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+
+.student-detail-item {
+  font-size: 0.85rem;
+}
+
+.student-detail-item span {
+  color: var(--text-muted);
+  display: block;
+  font-size: 0.75rem;
+}
+
+.student-detail-item strong {
+  color: var(--text-primary);
+}
+
+.references-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.reference-item {
+  padding: 0.9rem 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid var(--emerald-500);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.reference-item a {
+  word-break: break-all;
+}
+
+.disclaimer-banner {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.4rem;
+  font-size: 0.88rem;
+  color: #fde68a;
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}

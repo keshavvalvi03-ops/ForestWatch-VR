@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForestWatch VR - Immersive Deforestation Simulator & Conservation Awareness</title>
+  <meta name="description" content="An Immersive Virtual Reality-Based Simulator for Visualizing Deforestation Impacts and Promoting Forest Conservation Awareness. TY B.Tech AR/VR FA-2 Project by Keshav Valvii.">
+  <meta name="author" content="Keshav Valvii">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet GIS Styles -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- Project Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       Navigation Bar
+       ======================================================================== -->
+  <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <div class="container">
+      <a href="#hero" class="nav-brand">
+        <div class="nav-brand-logo">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L4 12h3v8h10v-8h3L12 2zm0 3.8l4.2 5.2H14v7h-4v-7H7.8L12 5.8z"/>
+          </svg>
+        </div>
+        <span>ForestWatch <span style="color:var(--emerald-400)">VR</span></span>
+        <span class="nav-tag-academic">FA-2</span>
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#hero" class="nav-link active">Home</a></li>
+        <li><a href="#map-section" class="nav-link">GIS Map</a></li>
+        <li><a href="#history-section" class="nav-link">Satellite History</a></li>
+        <li><a href="#simulator" class="nav-link">3D Simulator</a></li>
+        <li><a href="#restoration-lab" class="nav-link">Restoration Lab</a></li>
+        <li><a href="#analytics" class="nav-link">Impact Analytics</a></li>
+        <li><a href="#about" class="nav-link">Academic Docs</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Audio Quick Toggle -->
+        <button id="header-audio-toggle" class="btn btn-secondary btn-sm" aria-label="Toggle Forest Audio">
+          🔇 <span style="display:none;" class="d-md-inline">Audio</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="btn btn-secondary btn-icon" aria-label="Toggle Theme">
+          ☀️
+        </button>
+
+        <!-- Enter VR Quick CTA -->
+        <button class="btn btn-vr btn-sm enter-vr-btn" title="Launch Immersive WebXR VR">
+          🥽 <span class="d-none d-sm-inline">Enter VR</span>
+        </button>
+
+        <!-- Mobile Menu Hamburger -->
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open Navigation Menu">
+          ☰
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       1. Home Dashboard & Hero Section
+       ======================================================================== -->
+  <header id="hero" class="hero-section">
+    <div class="hero-backdrop"></div>
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-academic-banner">
+          <span class="pulse-indicator"></span>
+          <span>TY B.Tech AR/VR Formative Assessment 2 (FA-2)</span>
+        </div>
+
+        <h1 class="hero-title">
+          Visualizing <span class="hero-title-gradient">Deforestation</span> in Immersive VR
+        </h1>
+
+        <p class="hero-subtitle">
+          An interactive Virtual Reality-based simulator combining real-world satellite observation data with procedural 3D ecological modeling to promote global forest conservation awareness.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#simulator" class="btn btn-primary">
+            🌲 Explore 3D Forest
+          </a>
+          <button class="btn btn-vr enter-vr-btn">
+            🥽 Launch WebXR VR
+          </button>
+          <a href="#map-section" class="btn btn-secondary">
+            🗺️ Global Satellite Map
+          </a>
+        </div>
+
+        <div class="hero-stats-strip">
+          <div class="stat-item">
+            <div class="stat-value highlight animate-counter" data-target="420" data-decimals="0">0</div>
+            <div class="stat-label">Million Hectares Lost</div>
+            <div class="stat-subtext">Global tree cover since 1990 (FAO)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value animate-counter" data-target="10.4" data-decimals="1">0.0</div>
+            <div class="stat-label">Gt CO₂ Emitted / Year</div>
+            <div class="stat-subtext">Land-use change emissions (IPCC)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value highlight animate-counter" data-target="140" data-decimals="0">0</div>
+            <div class="stat-label">Active Virtual Canopy</div>
+            <div class="stat-subtext">Interactive 3D trees in simulation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Interactive Preview Card -->
+      <div class="hero-preview-card">
+        <div class="hero-preview-badge">
+          <span class="badge badge-emerald">Interactive 3D Telemetry</span>
+        </div>
+        <div style="padding: 2.2rem; display:flex; flex-direction:column; gap:1.2rem; justify-content:center; min-height:360px; background:radial-gradient(circle at 70% 30%, rgba(16, 185, 129, 0.15), transparent 70%);">
+          <h3 style="color:#ffffff;">ForestWatch Virtual Reserve</h3>
+          <p style="font-size:0.92rem; color:var(--text-secondary);">
+            Real-time multi-spectral canopy density, procedural carbon sink calculations, and biodiversity fragmentation simulations ready to inspect.
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
+            <span class="badge badge-emerald">✓ Three.js 3D Engine</span>
+            <span class="badge badge-emerald">✓ Leaflet GIS Integration</span>
+            <span class="badge badge-vr">✓ W3C WebXR Ready</span>
+            <span class="badge badge-amber">✓ Procedural Audio</span>
+          </div>
+          <div style="margin-top:0.8rem;">
+            <a href="#simulator" class="btn btn-primary btn-sm" style="width:100%;">
+              ⚡ Jump Directly to Simulator
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       2. Deforestation Map (Leaflet GIS)
+       ======================================================================== -->
+  <section id="map-section" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Global GIS Telemetry</span>
+        <h2 class="section-title">Worldwide Deforestation Monitoring</h2>
+        <p class="section-description">
+          Explore monitored tropical and boreal deforestation hotspots with high-resolution satellite imagery, driver classifications, and satellite sensors.
+        </p>
+      </div>
+
+      <div class="map-wrapper">
+        <div class="map-search-bar">
+          <span>🔍</span>
+          <input type="text" id="map-hotspot-search" class="map-search-input" placeholder="Search hotspot (e.g. Amazon, Borneo, Western Ghats)...">
+        </div>
+        <div id="leaflet-map" role="region" aria-label="Interactive Global Deforestation Map"></div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.2rem; flex-wrap:wrap; gap:1rem;">
+        <div style="font-size:0.82rem; color:var(--text-muted);">
+          📡 <strong>Sources:</strong> Global Forest Watch (WRI), Hansen/UMD Landsat Time-Series (2001-2023), ESA WorldCover 10m.
+        </div>
+        <div style="display:flex; gap:0.6rem;">
+          <button class="btn btn-secondary btn-sm" onclick="window.ForestMap.flyToHotspot('amazon_rondonia')">Amazon Basin</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.ForestMap.flyToHotspot('borneo_peatlands')">Borneo</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.ForestMap.flyToHotspot('western_ghats')">Western Ghats</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.ForestMap.flyToHotspot('congo_basin')">Congo Basin</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3. Historical Satellite Comparison
+       ======================================================================== -->
+  <section id="history-section" class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Time-Series Satellite Analysis</span>
+        <h2 class="section-title">Decadal Forest Loss Observations</h2>
+        <p class="section-description">
+          Drag the interactive split handle left and right to inspect verified multi-decadal satellite observations.
+        </p>
+      </div>
+
+      <!-- Case Selector -->
+      <div style="display:flex; justify-content:center; margin-bottom:1.8rem;">
+        <select id="history-case-select" class="btn btn-secondary" style="padding:0.6rem 1.2rem; font-size:0.95rem; cursor:pointer;" aria-label="Select Historical Case Study">
+          <option value="rondonia">Case 1: Rondônia, Brazilian Amazon (Fishbone Clearing)</option>
+          <option value="borneo">Case 2: Borneo Lowland Dipterocarp (Oil Palm Drainage)</option>
+          <option value="wghats">Case 3: Western Ghats, India (Linear Corridor Fragmentation)</option>
+        </select>
+      </div>
+
+      <!-- Split Screen Slider -->
+      <div class="compare-container" id="history-compare-container">
+        <!-- After Layer (Base) -->
+        <div class="compare-image-layer" id="history-layer-after">
+          <span class="compare-tag tag-after" id="compare-after-year">2024 Observed</span>
+        </div>
+        <!-- Before Layer (Overlay) -->
+        <div class="compare-image-layer compare-overlay-before" id="compare-overlay-before">
+          <div class="compare-image-layer" id="history-layer-before"></div>
+          <span class="compare-tag tag-before" id="compare-before-year">1985 Baseline</span>
+        </div>
+        <!-- Handle -->
+        <div class="compare-handle" id="compare-slider-handle" title="Drag to compare before and after">
+          ⇄
+        </div>
+      </div>
+
+      <!-- Timeline Scrubber -->
+      <div class="timeline-scrubber">
+        <button class="timeline-step-btn" data-step="0">1985 Baseline</button>
+        <button class="timeline-step-btn" data-step="1">2000 Expansion</button>
+        <button class="timeline-step-btn" data-step="2">2012 Intensive</button>
+        <button class="timeline-step-btn active" data-step="3">2024 Present</button>
+      </div>
+
+      <!-- Study Detail Card -->
+      <div class="glass-card" style="max-width:980px; margin:2rem auto 0 auto;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.8rem; flex-wrap:wrap; gap:0.5rem;">
+          <h3 id="history-study-title" style="color:var(--emerald-400);">Rondônia, Brazilian Amazon (BR-364 Corridor)</h3>
+          <span class="badge badge-danger" id="history-study-loss-badge">Cumulative Canopy Loss: 49%</span>
+        </div>
+        <p id="history-study-desc" style="font-size:0.92rem; color:var(--text-secondary); margin-bottom:0.8rem;">
+          Fishbone logging roads branched off highway BR-364, followed by cattle ranching and mechanized soy monoculture.
+        </p>
+        <div id="history-study-sensor" style="font-size:0.82rem; color:var(--text-dim);">
+          <strong>Sensor:</strong> Landsat 5 Thematic Mapper (TM) & Landsat 8/9 OLI | <strong>Resolution:</strong> 30m Multi-spectral | <strong>Attribution:</strong> NASA Earth Observatory / UMD Hansen Global Forest Change
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. 3D Forest Explorer & 5. Deforestation Simulator
+       ======================================================================== -->
+  <section id="simulator" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Simulation Engine</span>
+        <h2 class="section-title">3D Forest Explorer & Deforestation Lab</h2>
+        <p class="section-description">
+          Interact directly with the procedural Three.js 3D ecosystem: click on trees to fell them, manipulate deforestation rates, and observe live ecological degradation.
+        </p>
+      </div>
+
+      <!-- 3D Canvas Viewport -->
+      <div class="forest-canvas-container" id="forest-viewport">
+        <!-- Top HUD -->
+        <div class="canvas-hud-top">
+          <!-- Active Tool Palette -->
+          <div class="hud-panel">
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Tool:</span>
+            <button class="hud-tool-btn active" data-tool="inspect" title="Inspect scene and trees">
+              🔍 Inspect
+            </button>
+            <button class="hud-tool-btn danger-active" data-tool="fell" title="Click on any tree to chop/fell it">
+              🪓 Chop Tree
+            </button>
+            <button class="hud-tool-btn" data-tool="plant" title="Click on bare ground to plant a sapling">
+              🌱 Plant Sapling
+            </button>
+          </div>
+
+          <!-- Time of Day -->
+          <div class="hud-panel">
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Sky:</span>
+            <button class="hud-tool-btn active" data-time-of-day="day">☀️ Day</button>
+            <button class="hud-tool-btn" data-time-of-day="sunset">🌅 Sunset</button>
+            <button class="hud-tool-btn" data-time-of-day="night">🌙 Night</button>
+          </div>
+        </div>
+
+        <!-- Bottom HUD -->
+        <div class="canvas-hud-bottom">
+          <!-- Camera Presets -->
+          <div class="hud-panel">
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Camera:</span>
+            <button class="hud-tool-btn active" data-cam-preset="canopy">Aerial Canopy</button>
+            <button class="hud-tool-btn" data-cam-preset="walk">Ground Walk</button>
+            <button class="hud-tool-btn" data-cam-preset="deforestation_edge">Clearcut Edge</button>
+            <button class="hud-tool-btn" data-cam-preset="river">River Overlook</button>
+          </div>
+
+          <!-- WebXR Quick Enter Button -->
+          <div class="hud-panel">
+            <button class="btn btn-vr btn-sm enter-vr-btn">
+              🥽 Launch WebXR VR
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas Loading Spinner -->
+        <div class="canvas-loading-overlay" id="canvas-loader">
+          <div class="spinner"></div>
+          <div style="font-size:0.9rem; color:var(--text-secondary); font-weight:600;">Generating 3D Procedural Forest...</div>
+        </div>
+      </div>
+
+      <!-- Controls & Live Impact Summary Grid -->
+      <div class="simulator-layout-grid">
+        <!-- Live Scientific Impact Telemetry -->
+        <div class="glass-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
+            <h3>Live Ecological Indicators</h3>
+            <span class="badge badge-emerald">Continuous Mathematical Model</span>
+          </div>
+
+          <!-- Metric Cards Grid -->
+          <div class="metric-pill-grid">
+            <div class="metric-pill">
+              <span class="metric-pill-label">Active Scene Trees</span>
+              <span class="metric-pill-val good" id="metric-live-trees">140</span>
+              <span style="font-size:0.7rem; color:var(--text-dim);">Initial Baseline: 140 trees</span>
+            </div>
+
+            <div class="metric-pill">
+              <span class="metric-pill-label">Canopy Cover</span>
+              <span class="metric-pill-val good" id="metric-canopy-cover">100%</span>
+              <div class="progress-bar-container" style="margin-top:0.3rem;">
+                <div class="progress-bar-fill" id="canopy-progress-fill" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="metric-pill">
+              <span class="metric-pill-label">Annual Carbon Sink</span>
+              <span class="metric-pill-val" id="metric-carbon-sink">3.08 tCO₂/yr</span>
+              <span style="font-size:0.7rem; color:var(--text-dim);">~0.022 tCO₂/tree/yr (FAO)</span>
+            </div>
+
+            <div class="metric-pill">
+              <span class="metric-pill-label">Soil Erosion Risk</span>
+              <span class="metric-pill-val good" id="metric-erosion-risk">8/100</span>
+              <span style="font-size:0.7rem; color:var(--text-dim);">Runoff & splash vulnerability</span>
+            </div>
+
+            <div class="metric-pill">
+              <span class="metric-pill-label">Biodiversity Carrying Index</span>
+              <span class="metric-pill-val good" id="metric-biodiversity-index">100/100</span>
+              <span style="font-size:0.7rem; color:var(--text-dim);">Habitat connectivity score</span>
+            </div>
+
+            <div class="metric-pill">
+              <span class="metric-pill-label">Microclimate Anomaly</span>
+              <span class="metric-pill-val good" id="metric-microclimate-temp">+0.0°C</span>
+              <span style="font-size:0.7rem; color:var(--text-dim);">Evapotranspiration cooling loss</span>
+            </div>
+          </div>
+
+          <!-- User Interactive Tips -->
+          <div style="margin-top:1.2rem; padding:0.8rem 1rem; background:rgba(0,0,0,0.25); border-radius:var(--radius-md); font-size:0.82rem; color:var(--text-muted); display:flex; align-items:center; gap:0.6rem;">
+            <span>💡</span>
+            <span><strong>Pro-Tip:</strong> Select <strong>"🪓 Chop Tree"</strong> and click any tree to see it tilt, crash, and leave a stump. Use <strong>W/A/S/D</strong> keys on your keyboard to walk through the forest!</span>
+          </div>
+        </div>
+
+        <!-- Simulation Scenario Controls Sidebar -->
+        <div class="simulator-sidebar">
+          <div class="glass-card">
+            <h4 style="margin-bottom:1rem;">Deforestation Presets</h4>
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <button class="btn btn-secondary btn-sm active" data-scenario="pristine" style="justify-content:flex-start;">
+                🌿 1. Pristine Virgin Forest (100%)
+              </button>
+              <button class="btn btn-secondary btn-sm" data-scenario="selective_logging" style="justify-content:flex-start;">
+                🪵 2. Selective High-Grade Logging (72%)
+              </button>
+              <button class="btn btn-secondary btn-sm" data-scenario="fishbone_roads" style="justify-content:flex-start;">
+                🚜 3. Fishbone Infrastructure (40%)
+              </button>
+              <button class="btn btn-secondary btn-sm" data-scenario="wildfire_clearcut" style="justify-content:flex-start;">
+                🔥 4. Severe Wildfire / Clearcut (12%)
+              </button>
+            </div>
+
+            <!-- Bulk Slider -->
+            <div class="control-group" style="margin-top:1.5rem;">
+              <div class="control-label-row">
+                <span>Direct Canopy Slider:</span>
+                <span id="sim-tree-val" style="color:var(--emerald-400); font-family:var(--font-mono);">140</span>
+              </div>
+              <input type="range" id="sim-tree-slider" class="slider-custom" min="0" max="180" value="140" aria-label="Adjust live tree count in simulation">
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display:flex; gap:0.6rem; margin-top:1.2rem;">
+              <button id="sim-reset-btn" class="btn btn-secondary btn-sm" style="flex:1;">
+                ↺ Reset Scene
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. Restoration Lab
+       ======================================================================== -->
+  <section id="restoration-lab" class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Ecological Recovery</span>
+        <h2 class="section-title">Virtual Restoration & Reforestation Lab</h2>
+        <p class="section-description">
+          Plant native saplings, deploy autonomous drone seed bombing, and measure the recovery trajectory of soil health and carbon sequestration.
+        </p>
+      </div>
+
+      <div class="glass-card" style="max-width:980px; margin:0 auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+          <div>
+            <h3>Select Native Planting Species</h3>
+            <p style="font-size:0.88rem; color:var(--text-secondary);">Choose a species and click anywhere on the 3D terrain to plant.</p>
+          </div>
+          <button id="drone-seed-bomb-btn" class="btn btn-primary">
+            🛸 Autonomous Drone Seed Bomb (+15 Trees)
+          </button>
+        </div>
+
+        <!-- Species Cards Grid -->
+        <div class="species-card-grid">
+          <div class="species-card selected" data-species="teak">
+            <div class="species-icon">🌳</div>
+            <div class="species-name">Native Broadleaf (Teak/Oak)</div>
+            <div class="species-stat-row">
+              <span>Carbon Sequestration:</span>
+              <strong style="color:var(--emerald-400);">High</strong>
+            </div>
+            <div class="species-stat-row">
+              <span>Root Soil Depth:</span>
+              <strong>Deep (12m)</strong>
+            </div>
+            <div class="species-stat-row">
+              <span>Growth Rate:</span>
+              <strong>Moderate</strong>
+            </div>
+          </div>
+
+          <div class="species-card" data-species="conifer">
+            <div class="species-icon">🌲</div>
+            <div class="species-name">Pioneer Conifer (Pine)</div>
+            <div class="species-stat-row">
+              <span>Carbon Sequestration:</span>
+              <strong style="color:var(--accent-amber);">Moderate</strong>
+            </div>
+            <div class="species-stat-row">
+              <span>Soil Stabilization:</span>
+              <strong style="color:var(--emerald-400);">Rapid</strong>
+            </div>
+            <div class="species-stat-row">
+              <span>Growth Rate:</span>
+              <strong>Fast</strong>
+            </div>
+          </div>
+
+          <div class="species-card" data-species="fruit">
+            <div class="species-icon">🌸</div>
+            <div class="species-name">Biodiversity Blossom Tree</div>
+            <div class="species-stat-row">
+              <span>Wildlife Carrying:</span>
+              <strong style="color:var(--emerald-400);">Maximum</strong>
+            </div>
+            <div class="species-stat-row">
+              <span>Pollinator Support:</span>
+              <strong>High</strong>
+            </div>
+            <div class="species-stat-row">
+              <span>Growth Rate:</span>
+              <strong>Moderate</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Restoration Progress Strip -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border-subtle);">
+          <div>
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Trees Planted:</span>
+            <div style="font-size:1.6rem; font-weight:800; color:var(--emerald-400); font-family:var(--font-mono);" id="metric-trees-planted">0</div>
+          </div>
+          <div>
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Trees Felled:</span>
+            <div style="font-size:1.6rem; font-weight:800; color:var(--accent-danger); font-family:var(--font-mono);" id="metric-trees-removed">0</div>
+          </div>
+          <div>
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Restoration Tool:</span>
+            <div style="font-size:0.95rem; font-weight:700; color:var(--text-primary); margin-top:0.3rem;">
+              <span class="badge badge-emerald">Planting Ready</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       7. Impact Analytics (Chart.js)
+       ======================================================================== -->
+  <section id="analytics" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Scientific Analytics</span>
+        <h2 class="section-title">Ecosystem Impact Analytics</h2>
+        <p class="section-description">
+          Real-time synchronized data visualizations reflecting 3D simulation actions, verified global land-use drivers, and historical regional loss rates.
+        </p>
+      </div>
+
+      <div class="analytics-grid">
+        <!-- Chart 1: Radar -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">🌿 Ecosystem Services Integrity</h4>
+            <span class="badge badge-emerald">Live Synchronized</span>
+          </div>
+          <div class="chart-container-box">
+            <canvas id="chart-ecosystem-radar"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Biomass & Carbon Trend -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">📈 Simulation Biomass & Carbon Trend</h4>
+            <span class="badge badge-amber">Interactive History</span>
+          </div>
+          <div class="chart-container-box">
+            <canvas id="chart-biomass-trend"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Global Drivers Doughnut -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">🚜 Primary Drivers of Forest Loss</h4>
+            <span class="badge badge-emerald">FAO / WRI Telemetry</span>
+          </div>
+          <div class="chart-container-box">
+            <canvas id="chart-drivers-doughnut"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Regional Loss Bars -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">🗺️ Regional Loss Rates (Mha/yr)</h4>
+            <span class="badge badge-emerald">Global Forest Watch</span>
+          </div>
+          <div class="chart-container-box">
+            <canvas id="chart-regional-bars"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       8. VR Experience (WebXR)
+       ======================================================================== -->
+  <section id="vr-experience" class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <div class="vr-hardware-banner">
+        <div>
+          <span class="badge badge-vr" style="margin-bottom:0.6rem;">W3C WebXR Device API</span>
+          <h3 style="color:#ffffff;">Immersive Virtual Reality Mode</h3>
+          <p style="font-size:0.92rem; color:var(--text-secondary); max-width:680px; margin-top:0.4rem;">
+            Step inside the canopy using a compatible VR headset (Meta Quest 2/3/Pro, HTC Vive, Pico, or Apple Vision Pro). Experience true 1:1 scale tree felling, stereoscopic spatial depth, and interactive hand controller raycasting.
+          </p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.6rem; min-width:200px;">
+          <button class="btn btn-vr enter-vr-btn" style="width:100%; font-size:1.05rem;">
+            🥽 Enter VR Mode
+          </button>
+          <div style="font-size:0.75rem; text-align:center; color:var(--text-dim);">
+            Auto-detects WebXR hardware
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+        <div class="glass-card">
+          <h4>🥽 Supported Hardware</h4>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:0.4rem;">
+            Compatible with any browser supporting the W3C WebXR Device API, including Meta Quest Browser, Chrome with OpenXR, Edge, and Wolvic VR.
+          </p>
+        </div>
+        <div class="glass-card">
+          <h4>📱 Mobile & Desktop Fallback</h4>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:0.4rem;">
+            No VR headset? The entire 3D Forest Explorer works flawlessly right on your desktop, laptop, tablet, or phone with touch orbit, WASD walking, and pointer controls.
+          </p>
+        </div>
+        <div class="glass-card">
+          <h4>🎮 VR Interaction Scheme</h4>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:0.4rem;">
+            In VR, your right controller trigger aims a laser raycaster to chop or plant trees, while your left thumbstick provides continuous smooth locomotion through the reserve.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       9. Academic Documentation & References (FA-2)
+       ======================================================================== -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Academic Assessment</span>
+        <h2 class="section-title">Project Documentation & Scientific Methodology</h2>
+        <p class="section-description">
+          TY B.Tech Computer Engineering AR/VR Formative Assessment 2 (FA-2) official submission details and mathematical modeling formulations.
+        </p>
+      </div>
+
+      <!-- Student Profile Card -->
+      <div class="student-profile-badge">
+        <div class="student-avatar">KV</div>
+        <div>
+          <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+            <h3 style="margin:0; color:#ffffff;">Keshav Valvii</h3>
+            <span class="badge badge-emerald">Primary Researcher & Developer</span>
+          </div>
+          <div class="student-details-grid">
+            <div class="student-detail-item">
+              <span>PRN:</span>
+              <strong>123B1D052</strong>
+            </div>
+            <div class="student-detail-item">
+              <span>Department:</span>
+              <strong>Computer Engineering (Regional Language)</strong>
+            </div>
+            <div class="student-detail-item">
+              <span>Subject:</span>
+              <strong>AR/VR (Augmented & Virtual Reality)</strong>
+            </div>
+            <div class="student-detail-item">
+              <span>Assessment:</span>
+              <strong>Formative Assessment 2 (FA-2)</strong>
+            </div>
+            <div class="student-detail-item">
+              <span>Institution:</span>
+              <strong>Department of Computer Engineering [Placeholder]</strong>
+            </div>
+            <div class="student-detail-item">
+              <span>Academic Year:</span>
+              <strong>2026 – 2027 [Placeholder]</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Methodology Tabs/Cards -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.8rem;">
+        <!-- Card A: Mathematical Models -->
+        <div class="glass-card">
+          <h4>📐 Mathematical & Ecological Formulations</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary); margin:0.6rem 0;">
+            The simulator uses the following illustrative mathematical models parameterized from IPCC Tier 1 tropical biomass averages:
+          </p>
+          <ul style="font-size:0.85rem; color:var(--text-secondary); padding-left:1.2rem; display:flex; flex-direction:column; gap:0.5rem;">
+            <li>
+              <strong>Carbon Sequestration Rate:</strong><br>
+              <code>C_seq = N_trees × 0.022 tCO₂/year</code><br>
+              <em style="font-size:0.75rem; color:var(--text-dim);">(Assumes standard tropical moist tree baseline of ~22 kg CO₂/tree/yr)</em>
+            </li>
+            <li>
+              <strong>Soil Erosion & Runoff Risk Index:</strong><br>
+              <code>E_risk = min(100, max(5, 100 - (CanopyCover% × 0.92)))</code><br>
+              <em style="font-size:0.75rem; color:var(--text-dim);">(Models loss of foliage rainfall kinetic energy dissipation)</em>
+            </li>
+            <li>
+              <strong>Biodiversity Carrying Capacity Index:</strong><br>
+              <code>B_index = (CanopyCover% / 100)^1.25 × 100</code><br>
+              <em style="font-size:0.75rem; color:var(--text-dim);">(Non-linear habitat islanding penalty representing fragmentation)</em>
+            </li>
+            <li>
+              <strong>Canopy Microclimate Temperature Anomaly:</strong><br>
+              <code>ΔT = (1 - CanopyCover% / 100) × 3.4°C</code><br>
+              <em style="font-size:0.75rem; color:var(--text-dim);">(Surface heating due to loss of latent heat evapotranspiration)</em>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card B: Scientific Disclosure & Literature -->
+        <div class="glass-card">
+          <h4>🔬 Scientific Integrity & Data Sources</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary); margin:0.6rem 0;">
+            To maintain academic rigor, the project explicitly separates real-world satellite ground-truth observations from educational virtual approximations:
+          </p>
+          <div class="references-list">
+            <div class="reference-item">
+              <strong>1. Global Forest Watch / Hansen et al. (Science 2013, updated 2023):</strong><br>
+              High-resolution global maps of 21st-century forest cover change based on time-series analysis of Landsat imagery.
+            </div>
+            <div class="reference-item">
+              <strong>2. FAO Global Forest Resources Assessment (FRA 2020):</strong><br>
+              United Nations Food and Agriculture Organization official forestry biomass metrics and regional loss tables.
+            </div>
+            <div class="reference-item">
+              <strong>3. NASA Earth Observatory & Landsat Surface Reflectance:</strong><br>
+              Documented time-series telemetry of Brazilian Amazon BR-364 and Borneo peatland drainage.
+            </div>
+            <div class="reference-item">
+              <strong>4. W3C WebXR Device API Specification:</strong><br>
+              Web standards for accessing virtual reality and augmented reality devices in the browser.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transparent Educational Disclaimer -->
+      <div class="disclaimer-banner">
+        <span style="font-size:1.3rem;">⚠️</span>
+        <div>
+          <strong>Scientific & Academic Disclaimer:</strong>
+          The 3D tree counts and ecological indices presented in the simulator are illustrative models designed for environmental education and spatial visualization. Virtual planting does not replace real-world ecological reforestation, and calculated metrics should not be interpreted as physical survey results without ground-truth calibration.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="app-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <div class="nav-brand-logo" style="width:28px; height:28px;">
+              <svg viewBox="0 0 24 24" style="width:16px; height:16px;"><path d="M12 2L4 12h3v8h10v-8h3L12 2z"/></svg>
+            </div>
+            <strong style="color:var(--text-primary); font-size:1.15rem;">ForestWatch VR</strong>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-secondary); max-width:440px;">
+            An Immersive Virtual Reality-Based Simulator for Visualizing Deforestation Impacts and Promoting Forest Conservation Awareness.
+          </p>
+          <div style="font-size:0.78rem; color:var(--text-dim);">
+            Developed by Keshav Valvii | PRN: 123B1D052 | Department of Computer Engineering
+          </div>
+        </div>
+
+        <div>
+          <h5 style="color:var(--text-primary); margin-bottom:0.8rem;">Project Modules</h5>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.85rem;">
+            <li><a href="#hero">Home Dashboard</a></li>
+            <li><a href="#map-section">Leaflet GIS Map</a></li>
+            <li><a href="#history-section">Satellite Comparisons</a></li>
+            <li><a href="#simulator">3D Forest Explorer</a></li>
+            <li><a href="#restoration-lab">Restoration Lab</a></li>
+            <li><a href="#analytics">Impact Analytics</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h5 style="color:var(--text-primary); margin-bottom:0.8rem;">Academic Submission</h5>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.85rem; color:var(--text-secondary);">
+            <li>Course: TY B.Tech AR/VR</li>
+            <li>Assessment: FA-2</li>
+            <li>Runtime: 100% Client-Side</li>
+            <li>WebXR Compatible</li>
+            <li>Zero Paid Dependencies</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 ForestWatch VR. Formative Assessment 2 Project. All Rights Reserved.</div>
+        <div style="display:flex; gap:1.2rem;">
+          <a href="#hero">Back to Top ↑</a>
+          <a href="#about">Academic Citations</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       Floating Web Audio Control Widget
+       ======================================================================== -->
+  <div class="audio-controller-widget" id="audio-widget">
+    <button class="audio-btn" id="audio-toggle-btn" aria-label="Toggle Forest Audio">🔇</button>
+    <span class="pulse-indicator off" id="audio-pulse-dot"></span>
+    <span class="audio-status-label" id="audio-soundscape-label">Audio Muted</span>
+    <input type="range" class="audio-slider" id="audio-volume-slider" min="0" max="1" step="0.05" value="0.55" aria-label="Adjust Forest Volume">
+  </div>
+
+  <!-- ========================================================================
+       WebXR Status Modal
+       ======================================================================== -->
+  <div class="modal-backdrop" id="vr-modal" role="dialog" aria-modal="true" aria-labelledby="vr-modal-title">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="vr-modal-title" style="display:flex; align-items:center; gap:0.5rem; color:#c4b5fd;">
+          🥽 WebXR Hardware Status
+        </h3>
+        <button class="modal-close-btn" id="vr-modal-close" aria-label="Close Modal">&times;</button>
+      </div>
+      <p id="vr-modal-msg" style="font-size:0.95rem; color:var(--text-secondary); margin-bottom:1.2rem;">
+        No tethered or standalone VR headset (Meta Quest, HTC Vive, Pico, Vision Pro) detected on this hardware.
+      </p>
+      <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.5rem; font-size:0.85rem; color:var(--text-muted);">
+        <strong style="color:var(--text-primary);">How to view in VR:</strong>
+        <ol style="padding-left:1.2rem; margin-top:0.4rem; display:flex; flex-direction:column; gap:0.3rem;">
+          <li>Open this project URL on your standalone VR headset browser (e.g. Meta Quest Browser).</li>
+          <li>Or connect your VR headset to this PC using Oculus Link / AirLink / SteamVR.</li>
+          <li>Click the purple <strong>"Enter VR"</strong> button to initiate the stereoscopic session!</li>
+        </ol>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.8rem;">
+        <button class="btn btn-primary" id="vr-modal-dismiss">
+          Continue in 3D Browser Mode
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       External Scripts: Three.js, Leaflet, Chart.js
+       ======================================================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Application Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/simulator.js"></script>
+  <script src="js/scene3d.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
