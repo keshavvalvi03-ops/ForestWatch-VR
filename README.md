@@ -17,6 +17,8 @@
 | **Department** | Computer Engineering (Regional Language) |
 | **Subject** | AR/VR (Augmented & Virtual Reality) |
 | **Assessment** | Formative Assessment 2 (FA-2) |
+| **GitHub** | [@keshavvalvi03-ops](https://github.com/keshavvalvi03-ops) |
+| **Email** | `keshavvalvi03@gmail.com` |
 | **Academic Year** | 2026 – 2027 *(Placeholder)* |
 | **Institution** | Department of Computer Engineering *(Placeholder)* |
 | **Faculty Guide** | [Faculty Name Placeholder] |
@@ -187,19 +189,19 @@ As a beginner-friendly project, ForestWatch VR requires no compilation or build 
 2. Create a new repository on your GitHub account named `forestwatch-vr`.
 3. Add the remote and push:
    ```powershell
-   git remote add origin https://github.com/<your-username>/forestwatch-vr.git
+   git remote add origin https://github.com/keshavvalvi03-ops/forestwatch-vr.git
    git branch -M main
    git push -u origin main
    ```
 4. On GitHub, navigate to **Settings** > **Pages**.
 5. Under **Branch**, select `main` and `/ (root)`, then click **Save**.
 6. Within 1–2 minutes, your project will be live at:
-   `https://<your-username>.github.io/forestwatch-vr/`
+   `https://keshavvalvi03-ops.github.io/forestwatch-vr/`
 
 ---
 
 ## 📜 License & Acknowledgments
 
-- **Author:** Keshav Valvii (PRN: 123B1D052)
+- **Author:** Keshav Valvii (PRN: 123B1D052 | `keshavvalvi03@gmail.com`)
 - **Course:** TY B.Tech Computer Engineering (Regional Language) | AR/VR Formative Assessment 2
 - **Academic Citation:** Designed and built for academic research and educational awareness purposes.
